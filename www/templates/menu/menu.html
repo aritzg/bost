@@ -1,0 +1,40 @@
+<ion-view title="'Bost!!'" left-buttons="leftButtons"></ion-view>
+
+<ion-side-menus>
+
+    <ion-pane ion-side-menu-content>
+        <ion-nav-view name="menuContent" has-header="true" animation="none"/>
+    </ion-pane>
+
+    <ion-side-menu side="left">
+        <ion-content has-header="true" scroll="false">
+            <div class="list">
+
+                <a class="item item-icon-left" href="#/event/around" ng-click="toggleMenu()">
+                    <i class="icon ion-ionic"></i>
+                    Inguruan
+                </a>
+
+                <a class="item item-icon-left" href="#/event/map" ng-click="toggleMenu()">
+                    <i class="icon ion-map"></i>
+                    Mapa
+                </a>
+
+                <a class="item item-icon-left" href="#/event/ranking" ng-click="toggleMenu()">
+                    <i class="icon ion-arrow-graph-up-right"></i>
+                    Rankina
+                </a>
+
+                <a class="item item-icon-left" href="#/event/messages" ng-click="toggleMenu()">
+                    <i class="icon ion-speakerphone"></i>
+                    Abisuak
+                    <span class="badge badge-assertive">0</span>
+                </a>
+
+            </div>
+        </ion-content>
+
+
+    </ion-side-menu>
+
+</ion-side-menus>

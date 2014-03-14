@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Ionic Seed App</title>
+
+    <!-- ionic css -->
+    <link href="lib/css/ionic.css" rel="stylesheet">
+
+    <!-- your app's css -->
+    <link href="css/app.css" rel="stylesheet">
+
+    <!-- ionic/angularjs scripts -->
+    <script src="lib/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's script -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/restClients.js"></script>
+    <script src="js/dataManager.js"></script>
+
+    <script src="//maps.googleapis.com/maps/api/js?sensor=true"></script>
+</head>
+
+<!--
+  'starter' is the name of this angular module (js/app.js)
+-->
+<body ng-app="starter">
+
+<!--
+  The nav bar that will be updated as we navigate between views
+  Additional attributes set its look, ion-nav-bar animation and icons
+  Icons provided by Ionicons: http://ionicons.com/
+-->
+<ion-nav-bar type="bar-positive"
+             animation=""
+             back-button-type="button-icon button-clear"
+             back-button-icon="ion-android-arrow-back"></ion-nav-bar>
+
+
+<div ng-controller="MainCtrl">
+    <ion-nav-view></ion-nav-view>
+</div>
+
+
+</body>
+</html>

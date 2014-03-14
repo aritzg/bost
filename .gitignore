@@ -1,0 +1,6 @@
+*.keystore
+*.sw*
+platforms/
+plugins/
+merges/
+.idea

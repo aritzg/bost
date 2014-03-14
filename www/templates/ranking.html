@@ -1,0 +1,16 @@
+<ion-content has-header="true" has-tabs="true" padding="true">
+
+    <div class="list">
+        <a ng-repeat="business in businesses" class="item item-thumbnail-left" href="#/event/business/{{business.id}}">
+            <img src="img/ionic.png">
+
+            <h3>{{business.name}}</h3>
+
+            <p>{{business.address}}</p>
+        </a>
+
+    </div>
+
+</ion-content>
+
+
