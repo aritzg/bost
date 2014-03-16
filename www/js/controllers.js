@@ -1,7 +1,8 @@
 angular.module('bost.controllers', ['ionic.service.loading'])
 
 
-    .controller('MainCtrl', function ($scope, $ionicSideMenuDelegate, DataManager) {
+    .controller('MainCtrl', function ($state, $scope, $ionicSideMenuDelegate, BusinessCDBService, $ionicLoading) {
+        $scope.businesses = [];
         $scope.leftButtons = [
             {
                 type: 'button-icon button-clear ion-navicon',
@@ -26,7 +27,34 @@ angular.module('bost.controllers', ['ionic.service.loading'])
             }
         ];
 
-        DataManager.load();
+    })
+
+    .controller('LoadingCtrl', function ($state, $scope, BusinessCDBService) {
+
+        var businessLoaded = false;
+        var businessSync = false;
+
+        endLoading = function () {
+
+            businessLoaded = true;
+            if(businessLoaded && businessSync){
+                $state.transitionTo('menu.ranking');
+            }
+        };
+
+        endSync = function () {
+
+            businessSync = true;
+            if(businessLoaded && businessSync){
+                $state.transitionTo('menu.ranking');
+            }
+        };
+
+        //DataManager.load();
+        BusinessCDBService.start();
+        BusinessCDBService.addBusiness('234234', 'xxasdasdxx');
+        BusinessCDBService.loadAll($scope.businesses, endLoading);
+        BusinessCDBService.replicate(endSync);
 
     })
 
@@ -35,6 +63,8 @@ angular.module('bost.controllers', ['ionic.service.loading'])
         $scope.init = function () {
             $scope.toggleMenu();
         };
+
+
     })
 
     .controller('OfferCtrl', function ($scope, $stateParams, OfferService, BusinessService) {
@@ -42,8 +72,12 @@ angular.module('bost.controllers', ['ionic.service.loading'])
         $scope.business = BusinessService.get($scope.offer.businessId);
     })
 
-    .controller('RankingCtrl', function ($scope, $stateParams, BusinessService) {
-        $scope.businesses = BusinessService.all();
+    .controller('RankingCtrl', function ($scope, $stateParams, BusinessCDBService) {
+
+        //$scope.businesses = BusinessCDBService.all();
+        $scope.deleteBusiness = function (id) {
+            $scope.businesses = BusinessCDBService.delete($scope.businesses , id);
+        };
     })
 
     .controller('MessagesCtrl', function ($scope, $stateParams, MessageService) {
@@ -92,4 +126,9 @@ angular.module('bost.controllers', ['ionic.service.loading'])
         };
 
 
-    })
+    });
+
+var underscore = angular.module('underscore', []);
+underscore.factory('_', function() {
+    return window._; // assumes underscore has already been loaded on the page
+});

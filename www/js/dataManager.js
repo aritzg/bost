@@ -27,7 +27,7 @@ angular.module('bost.dm', ['bost.services', 'bost.restClients'])
         };
 
         function successCB () {
-            alert('yeah!!');
+            //alert('yeah!!');
         };
 
     });
