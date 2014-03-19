@@ -1,8 +1,14 @@
 angular.module('bost.controllers', ['ionic.service.loading'])
 
 
-    .controller('MainCtrl', function ($state, $scope, $ionicSideMenuDelegate, BusinessCDBService, $ionicLoading) {
+    .controller('MainCtrl', function ($state, $scope, $ionicSideMenuDelegate, BusinessCDBService, OfferCDBService, $ionicLoading) {
+
+        var startPage='menu.around';
+        //var startPage='menu.detail_fake';
+
         $scope.businesses = [];
+        $scope.offers = [];
+
         $scope.leftButtons = [
             {
                 type: 'button-icon button-clear ion-navicon',
@@ -27,49 +33,92 @@ angular.module('bost.controllers', ['ionic.service.loading'])
             }
         ];
 
-    })
+        $scope.loading = $ionicLoading.show({
+            content: 'Bost! Kargatzen ari da!',
+            showBackdrop: false
+        });
 
-    .controller('LoadingCtrl', function ($state, $scope, BusinessCDBService) {
 
-        var businessLoaded = false;
-        var businessSync = false;
 
-        endLoading = function () {
+        var loadedMap = {offerLoadedFlag : false , businessLoadedFlag : false};
 
-            businessLoaded = true;
-            if(businessLoaded && businessSync){
-                $state.transitionTo('menu.ranking');
+        endLoading = function (flag) {
+            loadedMap[flag]=true;
+            if(allLoaded()){
+                $state.transitionTo(startPage);
+                $scope.loading.hide();
             }
         };
 
-        endSync = function () {
-
-            businessSync = true;
-            if(businessLoaded && businessSync){
-                $state.transitionTo('menu.ranking');
-            }
+        allLoaded = function () {
+            return _.reduce(loadedMap, function(memo, num){return memo && num; }, true);
         };
 
-        //DataManager.load();
-        BusinessCDBService.start();
-        BusinessCDBService.addBusiness('234234', 'xxasdasdxx');
+
+        endReplicate = function () {
+            BusinessCDBService.loadAll($scope.businesses);
+            alert($scope.businesses.length);
+        };
+
+
+        OfferCDBService.initDB();
+        //OfferCDBService.add($scope.offers, 'Good mandra oofer', 'Bost kaña 2 ren prezioan' , 5);
+        OfferCDBService.loadAll($scope.offers, endLoading);
+
+        BusinessCDBService.initDB();
+        //BusinessCDBService.add($scope.businesses, 5, 'Mandra 5', 'sert 10');
         BusinessCDBService.loadAll($scope.businesses, endLoading);
-        BusinessCDBService.replicate(endSync);
+
+        OfferCDBService.replicate();
+        BusinessCDBService.replicate(endReplicate);
+
+
 
     })
 
-    .controller('OffersCtrl', function ($scope, OfferService) {
-        $scope.offers = OfferService.all();
+    .controller('OffersCtrl', function ($state, $scope, OfferCDBService) {
         $scope.init = function () {
             $scope.toggleMenu();
         };
 
+        $scope.itemButtons = [
+            {
+                text: 'Delete',
+                type: 'button-assertive',
+                onTap: function(offer) {
+                    alert(offer.title);
+                }
+            },
+            {
+                text: 'Share',
+                type: 'button-calm',
+                onTap: function(offer) {
+                    alert(offer.title);
+                }
+            }
+        ];
+
+        $scope.selectProject = function(id) {
+            $state.transitionTo('menu.detail', {offerId: id});
+        };
 
     })
 
-    .controller('OfferCtrl', function ($scope, $stateParams, OfferService, BusinessService) {
-        $scope.offer = OfferService.get($stateParams.offerId);
-        $scope.business = BusinessService.get($scope.offer.businessId);
+    .controller('OfferCtrl', function ($scope, $stateParams, BusinessCDBService, OfferCDBService, $timeout, dateFilter) {
+        $scope.offer = OfferCDBService.get($scope.offers, $stateParams.offerId);
+        if($scope.offer){
+            $scope.business = BusinessCDBService.getByBusinessId($scope.businesses, $scope.offer.businessId);
+        }
+
+        $scope.updateTime = function(){
+            $timeout(function(){
+                $scope.theclock = (dateFilter(new Date(), 'hh:mm:ss'));
+                $scope.updateTime();
+            },1000);
+        };
+
+        $scope.updateTime();
+
     })
 
     .controller('RankingCtrl', function ($scope, $stateParams, BusinessCDBService) {

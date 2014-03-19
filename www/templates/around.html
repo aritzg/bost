@@ -1,15 +1,12 @@
-<ion-content has-header="true" has-tabs="true" padding="true">
+<ion-content has-header="true" >
 
-    <div class="list">
-        <a ng-repeat="offer in offers" class="item item-thumbnail-left" href="#/event/offer/{{offer.id}}">
-            <img src="img/ionic.png">
-
-            <h3>{{offer.name}}</h3>
-
+    <ion-list option-buttons="itemButtons">
+        <ion-item ng-repeat="offer in offers" item="offer" class="item-thumbnail-left" ng-click="selectProject('{{offer._id}}')" >
+            <img src="img/st_patricks.png" >
+            <h3>{{offer.title}}</h3>
             <p>{{offer.description}}</p>
-        </a>
-
-    </div>
+        </ion-item >
+    </ion-list>
 
 </ion-content>
 

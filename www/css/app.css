@@ -22,3 +22,38 @@
 .scroll {
     height: 100%;
 }
+
+/*Offer detail styles*/
+
+#offer_detail{
+    background-color: #111111;
+}
+
+#offer_detail .bg-image {
+    position: fixed;
+    width: 120%;
+    height: 120%;
+    background-size: cover;
+}
+
+#offer_detail .detail-head{
+    background-color: #fff;
+    background-color: rgba(255,255,255,0.5);
+
+}
+
+@font-face {
+    font-family: 'digi';
+    src: url('http://cssdeck.com/uploads/resources/fonts/digii/DS-DIGII.TTF');
+}
+
+.clock {
+    font-family: 'digi';
+    font-size: 70px;
+    z-index: 11111;
+    position: relative;
+    height: 242px;
+    padding-top: 24px;
+    float: right;
+    padding-right: 26px;
+}

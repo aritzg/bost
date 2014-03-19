@@ -4,12 +4,12 @@ angular.module('bost.couch', [])
  * A simple example service that returns some data.
  */
 
-.factory('BusinessCDBService', function() {
+.factory('BusinessCDBServicexxx', function() {
 
     //var businesses = [];
 
     var db;
-    var remoteCouch = 'http://sareweb.net:5984/business';
+    var remoteCouch = 'http://192.168.0.14:5984/business';
 
     return {
         start: function() {
@@ -38,6 +38,7 @@ angular.module('bost.couch', [])
 
         },
         loadAll : function(businesses, callback){
+
            db.allDocs({include_docs: true, descending: true}, function(err, doc) {
                 doc.rows.forEach(function(element){
                    db.get(element.id, function(err, doc) {
@@ -52,14 +53,15 @@ angular.module('bost.couch', [])
                 });
                if(callback)callback();
             });
-
         },
         replicate : function(callback){
             //syncDom.setAttribute('data-sync-state', 'syncing');
-            //var opts = {continuous: true, complete: syncError};
-            db.replicate.to(remoteCouch);
-            //db.replicate.from(remoteCouch);
-            if(callback)callback();
+            var opts = {continuous: true, complete: callback};
+            //PouchDB.sync(remoteCouch);
+            db.replicate.to(remoteCouch, opts);
+            db.replicate.from(remoteCouch);
+            //if(callback)callback();
+
 
         },
         all : function(){

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.dm', 'bost.couch'])
+angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.couch', 'bost.couch.business', 'bost.couch.offer'])
 
 
     .config(function ($stateProvider, $urlRouterProvider) {
@@ -81,11 +81,20 @@ angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.d
                         controller: 'OfferCtrl'
                     }
                 }
+            })
+            .state('menu.detail_fake', {
+                url: "/offer-fake",
+                views: {
+                    'menuContent': {
+                        templateUrl: "templates/offer/offer_detail_fake.html",
+                        controller: 'OfferCtrl'
+                    }
+                }
             });
-
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/event/loading');
+        $urlRouterProvider.otherwise('/event/around');
 
 
     });
+
 
