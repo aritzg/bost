@@ -1,7 +1,13 @@
 <ion-content has-header="true" >
 
+    <ion-refresher
+            on-refresh="onRefresh()"
+            >
+        asdasd
+    </ion-refresher>
+
     <ion-list option-buttons="itemButtons">
-        <ion-item ng-repeat="offer in offers" item="offer" class="item-thumbnail-left" ng-click="selectProject('{{offer._id}}')" >
+        <ion-item ng-repeat="offer in offers" item="offer" class="item-thumbnail-left" ng-click="selectOffer('{{offer._id}}')" >
             <img src="img/st_patricks.png" >
             <h3>{{offer.title}}</h3>
             <p>{{offer.description}}</p>

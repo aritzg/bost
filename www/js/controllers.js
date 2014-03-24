@@ -1,9 +1,10 @@
-angular.module('bost.controllers', ['ionic.service.loading'])
+angular.module('bost.controllers', ['ionic.service.loading', 'akoenig.deckgrid'])
 
 
     .controller('MainCtrl', function ($state, $scope, $ionicSideMenuDelegate, BusinessCDBService, OfferCDBService, $ionicLoading) {
 
-        var startPage='menu.around';
+        var startPage='menu.offers';
+        //var startPage='menu.businesses';
         //var startPage='menu.detail_fake';
 
         $scope.businesses = [];
@@ -19,7 +20,6 @@ angular.module('bost.controllers', ['ionic.service.loading'])
         ];
 
         $scope.toggleMenu = function () {
-            //$scope.sideMenuController.toggleLeft();
             $ionicSideMenuDelegate.toggleLeft($scope.$$childHead);
         };
 
@@ -32,6 +32,8 @@ angular.module('bost.controllers', ['ionic.service.loading'])
                 }
             }
         ];
+
+        $scope.updateView = function(a){$scope.$apply()};
 
         $scope.loading = $ionicLoading.show({
             content: 'Bost! Kargatzen ari da!',
@@ -48,6 +50,7 @@ angular.module('bost.controllers', ['ionic.service.loading'])
                 $state.transitionTo(startPage);
                 $scope.loading.hide();
             }
+
         };
 
         allLoaded = function () {
@@ -56,29 +59,96 @@ angular.module('bost.controllers', ['ionic.service.loading'])
 
 
         endReplicate = function () {
-            BusinessCDBService.loadAll($scope.businesses);
-            alert($scope.businesses.length);
+            //BusinessCDBService.loadAll($scope.businesses);
         };
 
 
         OfferCDBService.initDB();
         //OfferCDBService.add($scope.offers, 'Good mandra oofer', 'Bost kaña 2 ren prezioan' , 5);
-        OfferCDBService.loadAll($scope.offers, endLoading);
+        OfferCDBService.loadAll($scope.offers, endLoading,$scope.updateView );
+        OfferCDBService.replicate(endReplicate);
 
         BusinessCDBService.initDB();
         //BusinessCDBService.add($scope.businesses, 5, 'Mandra 5', 'sert 10');
         BusinessCDBService.loadAll($scope.businesses, endLoading);
 
-        OfferCDBService.replicate();
-        BusinessCDBService.replicate(endReplicate);
 
+
+
+
+        //OfferCDBService.replicate(endReplicate);
+        //BusinessCDBService.replicate(endReplicate);
 
 
     })
 
     .controller('OffersCtrl', function ($state, $scope, OfferCDBService) {
-        $scope.init = function () {
+        /*$scope.init = function () {
             $scope.toggleMenu();
+        };*/
+
+        $scope.itemButtons = [
+            {
+                text: 'Delete',
+                type: 'button-assertive',
+                onTap: function(offer) {
+                    alert(offer.title);
+                }
+            },
+            {
+                text: 'Share',
+                type: 'button-calm',
+                onTap: function(offer) {
+                    alert(offer.title);
+                }
+            }
+        ];
+
+        $scope.selectOffer = function(id) {
+            $state.transitionTo('menu.detail', {offerId: id});
+        };
+
+        $scope.onRefresh = function() {
+            OfferCDBService.replicate($scope.endRefresh);
+        };
+
+        $scope.endRefresh = function() {
+            $scope.$broadcast('scroll.refreshComplete');
+
+            OfferCDBService.loadAll($scope.offers, undefined, $scope.updateView);
+
+        };
+
+
+
+
+    })
+
+    .controller('OfferCtrl', function ($scope, $stateParams, BusinessCDBService, OfferCDBService, $timeout, dateFilter) {
+        $scope.offer = OfferCDBService.get($scope.offers, $stateParams.offerId);
+        if($scope.offer){
+            $scope.business = BusinessCDBService.getByBusinessId($scope.businesses, $scope.offer.businessId);
+        }
+
+        $scope.items = [{code:'code', status:'sold'},{code:'code', status:'s'},{code:'code', status:'s'},{code:'code', status:'s'},{code:'code', status:'s'},
+            {code:'code', status:'s'},{code:'code', status:'s'},{code:'code', status:'s'},{code:'code', status:'s'},{code:'code', status:'s'}];
+
+        $scope.updateTime = function(){
+            $timeout(function(){
+                $scope.theclock = (dateFilter(new Date(), 'hh:mm'));
+                $scope.updateTime();
+            },1000);
+        };
+
+        $scope.updateTime();
+
+    })
+
+    .controller('BusinessesCtrl', function ($state, $scope, $stateParams, BusinessCDBService) {
+
+        //$scope.businesses = BusinessCDBService.all();
+        $scope.deleteBusiness = function (id) {
+            $scope.businesses = BusinessCDBService.delete($scope.businesses , id);
         };
 
         $scope.itemButtons = [
@@ -98,34 +168,8 @@ angular.module('bost.controllers', ['ionic.service.loading'])
             }
         ];
 
-        $scope.selectProject = function(id) {
+        $scope.selectBusiness = function(id) {
             $state.transitionTo('menu.detail', {offerId: id});
-        };
-
-    })
-
-    .controller('OfferCtrl', function ($scope, $stateParams, BusinessCDBService, OfferCDBService, $timeout, dateFilter) {
-        $scope.offer = OfferCDBService.get($scope.offers, $stateParams.offerId);
-        if($scope.offer){
-            $scope.business = BusinessCDBService.getByBusinessId($scope.businesses, $scope.offer.businessId);
-        }
-
-        $scope.updateTime = function(){
-            $timeout(function(){
-                $scope.theclock = (dateFilter(new Date(), 'hh:mm:ss'));
-                $scope.updateTime();
-            },1000);
-        };
-
-        $scope.updateTime();
-
-    })
-
-    .controller('RankingCtrl', function ($scope, $stateParams, BusinessCDBService) {
-
-        //$scope.businesses = BusinessCDBService.all();
-        $scope.deleteBusiness = function (id) {
-            $scope.businesses = BusinessCDBService.delete($scope.businesses , id);
         };
     })
 

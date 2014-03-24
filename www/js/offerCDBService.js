@@ -5,7 +5,7 @@ angular.module('bost.couch.offer', [])
 
 
         var db;
-        var remoteDataBase = "http://localhost:5984/" + 'offer';
+        var remoteCouch = 'http://192.168.0.14:5984/offer';
 
         return {
             initDB: function () {
@@ -42,28 +42,43 @@ angular.module('bost.couch.offer', [])
                 });
 
             },
-            loadAll: function (offers, callback) {
-                db.allDocs({include_docs: true, descending: true}, function (err, doc) {
+            loadAll: function (offers, callback, updateView) {
+                //offers=[];
+                db.allDocs({include_docs: true, descending: false}, function (err, doc) {
+
                     doc.rows.forEach(function (element) {
+;
                         db.get(element.id, function (err, doc) {
                             if (err) {
                                 console.log(err);
                             }
                             else {
-                                offers.push(doc);
+                                //offers.push(doc);
+                                var index =  _.indexOf(offers,_.findWhere(offers, {_id: doc._id}));
+                                if(index==-1){
+                                   offers.push(doc);
+
+                                }
+                                else{
+                                    offers[index]=doc;
+                                }
+                                updateView();
+                                //alert(_.findWhere(offers, {_id: doc._id})._id);
                             }
                         });
 
                     });
+
                     if (callback)callback('offerLoadedFlag');
 
                 });
 
             },
             replicate: function (callback) {
-                var opts = {continuous: true, complete: callback};
-                db.replicate.to(remoteDataBase, opts);
-                db.replicate.from(remoteDataBase);
+                var opts = {continuous: true, complete: callback()};
+                //db.replicate.to(remoteCouch, opts);
+                db.replicate.from(remoteCouch, opts);
+                //db.sync(remoteCouch, opts);
 
             },
             all: function () {

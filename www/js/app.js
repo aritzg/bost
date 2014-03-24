@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.couch', 'bost.couch.business', 'bost.couch.offer'])
+angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.couch.business', 'bost.couch.offer'])
 
 
     .config(function ($stateProvider, $urlRouterProvider) {
@@ -33,11 +33,21 @@ angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.c
                 }
             })
 
-            .state('menu.around', {
-                url: "/around",
+            .state('menu.businesses', {
+                url: "/businesses",
                 views: {
                     'menuContent': {
-                        templateUrl: "templates/around.html",
+                        templateUrl: "templates/businesses.html",
+                        controller: 'BusinessesCtrl'
+                    }
+                }
+            })
+
+            .state('menu.offers', {
+                url: "/offers",
+                views: {
+                    'menuContent': {
+                        templateUrl: "templates/offers.html",
                         controller: 'OffersCtrl'
                     }
                 }
@@ -53,15 +63,7 @@ angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.c
                 }
             })
 
-            .state('menu.ranking', {
-                url: "/ranking",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/ranking.html",
-                        controller: 'RankingCtrl'
-                    }
-                }
-            })
+
 
             .state('menu.messages', {
                 url: "/messages",
@@ -92,7 +94,7 @@ angular.module('starter', ['ionic', 'bost.services', 'bost.controllers', 'bost.c
                 }
             });
         // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/event/around');
+        //$urlRouterProvider.otherwise('/event/ranking');
 
 
     });

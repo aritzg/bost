@@ -34,6 +34,7 @@
     width: 120%;
     height: 120%;
     background-size: cover;
+    z-index: -999;
 }
 
 #offer_detail .detail-head{
@@ -47,13 +48,43 @@
     src: url('http://cssdeck.com/uploads/resources/fonts/digii/DS-DIGII.TTF');
 }
 
-.clock {
+#offer_detail .clock {
     font-family: 'digi';
-    font-size: 70px;
-    z-index: 11111;
+    font-size: 35px;
     position: relative;
-    height: 242px;
-    padding-top: 24px;
     float: right;
-    padding-right: 26px;
+}
+
+#offer_detail progress {
+    width: 100%;
+}
+
+
+#offer_detail .deckgrid[deckgrid]::before {
+    /* Specifies that the grid should have a maximum of 4 columns. Each column will have the classes 'column' and 'column-1-4' */
+    content: '9 .column.column-1-9';
+    font-size: 0; /* See https://github.com/akoenig/angular-deckgrid/issues/14#issuecomment-35728861 */
+    visibility: hidden;
+}
+
+#offer_detail .deckgrid .column {
+    float: left;
+}
+
+#offer_detail .deckgrid .column-1-9 {
+    width: 9%;
+}
+
+@media screen and (max-width: 480px){
+    #offer_detail .deckgrid[deckgrid]::before {
+        content: '4 .column.column-1-4';
+    }
+
+    #offer_detail .deckgrid .column-1-4 {
+        width: 24%;
+    }
+}
+
+#offer_detail .deckgrid .sold {
+    background-image: url('img/beer.png');
 }

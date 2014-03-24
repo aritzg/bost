@@ -58,17 +58,17 @@ angular.module('bost.couch.business', [])
 
                     });
                     if (callback)callback('businessLoadedFlag');
+
                 });
 
             },
             replicate: function (callback) {
                 var opts = {continuous: true, complete: callback};
 
-                //PouchDB.sync(remoteDataBase);
-
                 db.replicate.to(remoteDataBase, opts);
                 db.replicate.from(remoteDataBase);
-                if (callback)callback();
+
+                //if (callback)callback();
             },
             all: function () {
                 return businesses;
